@@ -1,0 +1,454 @@
+[gd_scene load_steps=4 format=3 uid="uid://bqxvn8yqxqxqx"]
+
+[ext_resource type="Script" path="res://scripts/Launcher.gd" id="1_0xqxq"]
+[ext_resource type="Texture2D" uid="uid://bqxvn8yqxqxqx" path="res://assets/images/mv1024.jpg" id="2_0xqxq"]
+[ext_resource type="Script" path="res://scripts/CursorController.gd" id="3_0xqxq"]
+
+[node name="Launcher" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_0xqxq")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("2_0xqxq")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MainPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+
+[node name="Header" type="HBoxContainer" parent="MainPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Logo" type="TextureRect" parent="MainPanel/VBoxContainer/Header"]
+layout_mode = 2
+custom_minimum_size = Vector2(64, 64)
+texture = ExtResource("2_0xqxq")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="MainPanel/VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Murloc Village Launcher"
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.827, 0.702, 0.349, 1)
+
+[node name="Version" type="Label" parent="MainPanel/VBoxContainer/Header"]
+layout_mode = 2
+text = "v1.0.0"
+theme_override_colors/font_color = Color(0.827, 0.702, 0.349, 1)
+
+[node name="HSeparator" type="HSeparator" parent="MainPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ContentArea" type="TabContainer" parent="MainPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Game Options" type="VBoxContainer" parent="MainPanel/VBoxContainer/ContentArea"]
+layout_mode = 2
+
+[node name="GameOptionsPanel" type="Panel" parent="MainPanel/VBoxContainer/ContentArea/Game Options"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GameOptionsContent" type="VBoxContainer" parent="MainPanel/VBoxContainer/ContentArea/Game Options/GameOptionsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="GameOptionsLabel" type="Label" parent="MainPanel/VBoxContainer/ContentArea/Game Options/GameOptionsPanel/GameOptionsContent"]
+layout_mode = 2
+text = "Game Options"
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.827, 0.702, 0.349, 1)
+
+[node name="Addons" type="VBoxContainer" parent="MainPanel/VBoxContainer/ContentArea"]
+layout_mode = 2
+
+[node name="AddonsPanel" type="Panel" parent="MainPanel/VBoxContainer/ContentArea/Addons"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AddonsContent" type="VBoxContainer" parent="MainPanel/VBoxContainer/ContentArea/Addons/AddonsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="AddonsLabel" type="Label" parent="MainPanel/VBoxContainer/ContentArea/Addons/AddonsPanel/AddonsContent"]
+layout_mode = 2
+text = "Addons"
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.827, 0.702, 0.349, 1)
+
+[node name="HSeparator2" type="HSeparator" parent="MainPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ProgressArea" type="VBoxContainer" parent="MainPanel/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 80)
+
+[node name="FileProgress" type="ProgressBar" parent="MainPanel/VBoxContainer/ProgressArea"]
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_2")
+theme_override_styles/background = SubResource("StyleBoxFlat_3")
+
+[node name="FileLabel" type="Label" parent="MainPanel/VBoxContainer/ProgressArea"]
+layout_mode = 2
+text = "Ready"
+theme_override_colors/font_color = Color(0.827, 0.702, 0.349, 1)
+
+[node name="TotalProgress" type="ProgressBar" parent="MainPanel/VBoxContainer/ProgressArea"]
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_4")
+theme_override_styles/background = SubResource("StyleBoxFlat_5")
+
+[node name="TotalLabel" type="Label" parent="MainPanel/VBoxContainer/ProgressArea"]
+layout_mode = 2
+text = "Total: 0%"
+theme_override_colors/font_color = Color(0.827, 0.702, 0.349, 1)
+
+[node name="HSeparator3" type="HSeparator" parent="MainPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ButtonArea" type="HBoxContainer" parent="MainPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="RepairButton" type="Button" parent="MainPanel/VBoxContainer/ButtonArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Repair"
+theme_override_styles/normal = SubResource("StyleBoxFlat_6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8")
+theme_override_colors/font_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_focus_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_hover_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_pressed_color = Color(0.827, 0.702, 0.349, 1)
+
+[node name="PlayButton" type="Button" parent="MainPanel/VBoxContainer/ButtonArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Play"
+theme_override_styles/normal = SubResource("StyleBoxFlat_9")
+theme_override_styles/hover = SubResource("StyleBoxFlat_10")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_11")
+theme_override_colors/font_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_focus_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_hover_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_pressed_color = Color(0.827, 0.702, 0.349, 1)
+
+[node name="DownloadButton" type="Button" parent="MainPanel/VBoxContainer/ButtonArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Download"
+theme_override_styles/normal = SubResource("StyleBoxFlat_12")
+theme_override_styles/hover = SubResource("StyleBoxFlat_13")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_14")
+theme_override_colors/font_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_focus_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_hover_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_pressed_color = Color(0.827, 0.702, 0.349, 1)
+
+[node name="SettingsButton" type="Button" parent="MainPanel/VBoxContainer/ButtonArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Settings"
+theme_override_styles/normal = SubResource("StyleBoxFlat_15")
+theme_override_styles/hover = SubResource("StyleBoxFlat_16")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_17")
+theme_override_colors/font_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_focus_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_hover_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_pressed_color = Color(0.827, 0.702, 0.349, 1)
+
+[node name="QuitButton" type="Button" parent="MainPanel/VBoxContainer/ButtonArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Quit"
+theme_override_styles/normal = SubResource("StyleBoxFlat_18")
+theme_override_styles/hover = SubResource("StyleBoxFlat_19")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_20")
+theme_override_colors/font_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_focus_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_hover_color = Color(0.827, 0.702, 0.349, 1)
+theme_override_colors/font_pressed_color = Color(0.827, 0.702, 0.349, 1)
+
+[node name="Footer" type="Label" parent="MainPanel/VBoxContainer"]
+layout_mode = 2
+text = "Murloc Village Launcher - v1.0.0"
+theme_override_colors/font_color = Color(0.827, 0.702, 0.349, 1)
+
+[node name="SwimmingMurloc" type="AnimatedSprite2D" parent="."]
+position = Vector2(-200, 400)
+script = ExtResource("3_0xqxq")
+
+[node name="CursorController" type="Node" parent="."]
+script = ExtResource("3_0xqxq")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+bg_color = Color(0.125, 0.125, 0.125, 0.9)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.827, 0.702, 0.349, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
+bg_color = Color(0.2, 0.4, 0.8, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3"]
+bg_color = Color(0.1, 0.1, 0.1, 0.5)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.827, 0.702, 0.349, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4"]
+bg_color = Color(0.2, 0.4, 0.8, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5"]
+bg_color = Color(0.1, 0.1, 0.1, 0.5)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.827, 0.702, 0.349, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6"]
+bg_color = Color(0.49, 0.043, 0.047, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.149, 0.086, 0.047, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7"]
+bg_color = Color(0.49, 0.043, 0.047, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.827, 0.702, 0.349, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8"]
+bg_color = Color(0.306, 0.047, 0.043, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.149, 0.086, 0.047, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_9"]
+bg_color = Color(0.49, 0.043, 0.047, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.149, 0.086, 0.047, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_10"]
+bg_color = Color(0.49, 0.043, 0.047, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.827, 0.702, 0.349, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_11"]
+bg_color = Color(0.306, 0.047, 0.043, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.149, 0.086, 0.047, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_12"]
+bg_color = Color(0.49, 0.043, 0.047, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.149, 0.086, 0.047, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_13"]
+bg_color = Color(0.49, 0.043, 0.047, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.827, 0.702, 0.349, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_14"]
+bg_color = Color(0.306, 0.047, 0.043, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.149, 0.086, 0.047, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_15"]
+bg_color = Color(0.49, 0.043, 0.047, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.149, 0.086, 0.047, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_16"]
+bg_color = Color(0.49, 0.043, 0.047, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.827, 0.702, 0.349, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_17"]
+bg_color = Color(0.306, 0.047, 0.043, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.149, 0.086, 0.047, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_18"]
+bg_color = Color(0.49, 0.043, 0.047, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.149, 0.086, 0.047, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_19"]
+bg_color = Color(0.49, 0.043, 0.047, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.827, 0.702, 0.349, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_20"]
+bg_color = Color(0.306, 0.047, 0.043, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.149, 0.086, 0.047, 1)

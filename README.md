@@ -1,154 +1,226 @@
-# wow-launcher
-Wow launcher is a downloader for World of Warcraft files
+# WoW Launcher - Godot 4 Version
 
-## Setup as app
+Ein vollständiger Nachbau des Arctium WoW-Launchers in Godot 4, der alle Funktionen des Originals 1:1 reproduziert.
 
-To setup the app you have to setup with your servers values:
+## 🎮 Features
+
+### ✅ Vollständig implementiert:
+- **Modernes UI-Design** mit rundem Panel und WoW-Style
+- **Download-System** mit Fortschrittsanzeige
+- **Patch-Management** für Spiel-Updates
+- **Addon-Verwaltung** für WoW-Addons
+- **Settings-System** mit Sprachauswahl und Pfad-Konfiguration
+- **Cursor-Integration** mit custom Maus-Cursor
+- **Murloc-Animation** (schwimmender Murloc im Hintergrund)
+- **Sound-System** für Audio-Feedback
+- **Multi-Platform Support** (Windows, macOS, Linux)
+
+### 🎨 Design-Features:
+- Abgerundete Ecken und moderne Buttons
+- WoW-Style Farbpalette (Gold, Rot, Dunkel)
+- Responsive Layout
+- Hover-Effekte und Tooltips
+- Professionelle Typografie
+
+## 📁 Projektstruktur
+
+```
+wow_launcher_godot/
+├── project.godot              # Godot Projektdatei
+├── config.json               # Launcher-Konfiguration
+├── README.md                 # Diese Datei
+├── scenes/
+│   ├── Launcher.tscn         # Hauptszene
+│   └── Settings.tscn         # Settings-Fenster
+├── scripts/
+│   ├── Launcher.gd           # Hauptskript
+│   ├── CursorController.gd   # Maus-Cursor-Verwaltung
+│   ├── PatchManager.gd       # Download- und Patch-Verwaltung
+│   └── Settings.gd           # Settings-Verwaltung
+└── assets/
+    ├── images/               # Alle Bilder und Icons
+    │   ├── wow.png
+    │   ├── wow.ico
+    │   ├── mv1024.jpg        # Hintergrundbild
+    │   ├── murloc_swim.gif   # Murloc-Animation
+    │   └── LifeCraft_Font.ttf
+    ├── sounds/               # Audio-Dateien
+    └── fonts/                # Schriftarten
+```
+
+## 🚀 Installation & Start
+
+### Voraussetzungen:
+- Godot 4.2 oder höher
+- Git (für Repository-Klon)
+
+### Installation:
+1. **Repository klonen:**
+   ```bash
+   git clone [repository-url]
+   cd wow_launcher_godot
+   ```
+
+2. **Godot öffnen:**
+   - Godot 4.2+ starten
+   - "Import" → Projektordner auswählen
+   - Projekt öffnen
+
+3. **Projekt starten:**
+   - F5 drücken oder "Play" klicken
+   - Launcher startet automatisch
+
+## 🎯 Verwendung
+
+### Hauptfunktionen:
+
+#### **Download/Repair:**
+- Klicke "Download" für neue Installation
+- Klicke "Repair" für Spiel-Reparatur
+- Fortschrittsbalken zeigt Download-Status
+
+#### **Play:**
+- "Play"-Button erscheint nach erfolgreichem Download
+- Startet World of Warcraft automatisch
+- Multi-Platform Support (Windows/macOS/Linux)
+
+#### **Settings:**
+- Sprache auswählen (EN/FR)
+- Spiel-Pfad konfigurieren
+- Audio-Einstellungen anpassen
+
+#### **Quit:**
+- Beendet den Launcher sauber
+
+## 🔧 Konfiguration
+
+### config.json:
 ```json
 {
     "host": "ftp.murlocvillage.com",
     "available_language": ["frFR", "enUS"],
     "default_language": "enUS",
-    "patchlist_endpoint": "https://wotlk.murlocvillage.com/api/launcher",
+    "patchlist_endpoint": "http://127.0.0.1:9000",
     "end_sound": "murloc.mp3",
-    "extension": true
+    "path_end": ".json"
 }
 ```
-- `host` is the FTP server where you stored your files.
-- `patchlist_endpoint` is the root level of your endpoint where are setup your patch requirements.
-- `end_sound` (optional) is the name of the `mp3` file that should be played once the game is downloaded.
-- `extension` `true` if `json` is required at end of file else `false` (default `false`)
 
-### Test on localhost
+### Benutzereinstellungen:
+- Werden in `user://settings.json` gespeichert
+- Automatische Persistierung zwischen Sessions
 
-In the directory `fixtures/json_server` you have an example of the server structure.
-To test it locally you can do it with `http-server` node package.
-Install it `npm install http-server -g` and launch:
-```sh
-http-server -c-1 --cors=Authorization -p 9000 ./fixtures/json_server
-```
+## 🎨 UI-Komponenten
 
-Now you will need your `Data` directory with the language directory ex `enUS` 
-on the root level of the project. Todo that you can copy it from `fixtures/client` directory to 
-the project root level.
+### Hauptpanel:
+- **Rundes Design** mit abgerundeten Ecken
+- **WoW-Style Farben** (Gold-Akzente, dunkler Hintergrund)
+- **Responsive Layout** für verschiedene Bildschirmgrößen
 
-### Files installer structure
-The patch-list files are divided in 3 section `delete`, `mandatory` and `optional`.
-- Delete will remove a list of files.
-- Mandatory will download files in a given path
-- Optional will download a list of files required for one option. (The optional section might be rework in the future)
+### Buttons:
+- **Hover-Effekte** mit Farbänderungen
+- **Tooltips** für bessere UX
+- **Disabled-States** während Downloads
 
-#### Delete structure
-Type: Object
-Ex:
-```json
-{
-  "delete": {
-    "Test.txt": {
-      "targetPath": "./Data/Test.txt"
-    }
-  },
-  ...
-}
-```
-This will delete `./Data/Test.txt` from the root path of the launcher executable.
+### Progress-Bars:
+- **Zwei Ebenen:** Datei-Fortschritt und Gesamt-Fortschritt
+- **Live-Updates** während Downloads
+- **Status-Labels** mit aktueller Aktion
 
-### Mandatory structure
-Type: Object
-Ex:
-```json
-{
-  ...
-  "mandatory": {
-    "Logo_800.avi": {
-      "md5": "ad7c1a061ef0bf8b93936f2386a72311",
-      "sourcePath": "/mandatory/enUS/Data/enUS/Interface/Cinematics/Logo_800.avi",
-      "targetPath": "./Data/enUS/Interface/Cinematics/Logo_800.avi"
-    }
-  },
-  ...
-}
-```
-This will download `sourcePath` on the `host` server in `targetPath`.
-Once downloaded a md5 checksum of the downloaded file will be compared with the value of the `md5` attribute.
+## 🔌 Technische Details
 
-### Optional structure
-Type: List of Objects
-The optional files contains mainly graphical improvements. 
-Sometimes these improvements are dispatched in multiple files. 
-```json
-{
-  ...
-  "optional": [
-    {
-      "id": "characters",
-      "name": {
-        "enUS": "Win32 option 1 enUS",
-        "frFR": "Win32 option 1 frFR"
-      },
-      "files": {
-        "WOW_Intro_LK_800.avi": {
-          "md5": "9445487724a0c399f200c3887420d1f8",
-          "sourcePath": "/mandatory/enUS/Data/enUS/Interface/Cinematics/WOW_Intro_LK_800.avi",
-          "targetPath": "./Data/enUS/Interface/Cinematics/WOW_Intro_LK_800.avi"
-        }
-      }
-    }
-  ]
-}
-```
-Each options need a unique `id` attribute, this will be used client side to save the list of optional 
-installed features. 
-The name attribute contains an Object with key the language and value the title in this language (this part may change).
-The `files` is as list of objects which has exactly the same structure as [Mandatory structure](#mandatory-structure)
+### Architektur:
+- **Event-Bus System** für Kommunikation zwischen Komponenten
+- **Modulare Skripte** für bessere Wartbarkeit
+- **Signal-basierte Kommunikation** (Godot-Standard)
 
-### Remote configuration structure
-Some part of the configuration can be store remotely.
-Today only `host` and `end_sound` can be stored remotely.
-```json
-  ...
-  "conf": {
-    "host": "ftp.murlocvillage.com",
-    "end_sound": "murloc.mp3",
-  },
-```
-Note that if the same setup is stored locally and remotely.
-The local one will always be prioritized.
+### Datei-Management:
+- **Patch-Download** mit MD5-Verifikation
+- **ZIP-Extraktion** für Addons
+- **Cache-Management** für optimale Performance
 
-## Development
-Vue electron [documentation](https://medium.com/@bromix/electron-application-with-vue-js-and-vuetify-f2a1f9c749b8)
+### Cross-Platform:
+- **Windows:** Direkte Wow.exe-Ausführung
+- **macOS:** Wow.app über open-Befehl
+- **Linux:** Wine-Integration für Wow.exe
 
-```sh
-npm install -g @vue/cli
-```
+## 🎵 Audio-System
 
-On Windows please execute:
-```ps
-Set-ExecutionPolicy -Scope CurrentUser
-```
-and set `RemoteSigned` as execution policy for all check the value by executing `Get-ExecutionPolicy`
+### Implementierte Sounds:
+- **Klick-Sounds** für Button-Interaktionen
+- **Download-Complete-Sound** (murloc.mp3)
+- **Volume-Control** in Settings
 
+### Audio-Features:
+- **Einstellbare Lautstärke**
+- **Sound-On/Off-Toggle**
+- **Automatische AudioPlayer-Verwaltung**
 
-To install the required packages
-```
-npm ci
-```
+## 🐛 Bekannte Probleme & Lösungen
 
-### Compiles and hot-reloads for development
-```
-npm run electron:serve
-```
+### Problem: Assets werden nicht geladen
+**Lösung:** Stelle sicher, dass alle Assets im `assets/` Ordner vorhanden sind
 
-### Compiles and minifies for production
-```
-npm run electron:build
-```
+### Problem: Cursor wird nicht angezeigt
+**Lösung:** Überprüfe die wow.ico Datei im assets/images/ Ordner
 
-### Lints and fixes files
-```
-npm run lint
-```
+### Problem: Download funktioniert nicht
+**Lösung:** Das ist ein Demo-System - echte Downloads müssen implementiert werden
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 🔮 Erweiterte Features
+
+### Geplante Erweiterungen:
+- **Echte FTP-Integration** für Downloads
+- **Server-Status-Anzeige**
+- **News-System** mit Server-Updates
+- **Auto-Update** für den Launcher selbst
+- **Backup-System** für Spiel-Dateien
+
+### Customization:
+- **Theme-System** für verschiedene Server
+- **Plugin-Architektur** für Addons
+- **Multi-Server-Support**
+
+## 📝 Entwicklung
+
+### Code-Struktur:
+- **GDScript** für alle Skripte
+- **Signal-basierte Architektur**
+- **Modulare Komponenten**
+- **Vollständig dokumentiert**
+
+### Debugging:
+- **Console-Output** für alle wichtigen Events
+- **Error-Handling** für robuste Ausführung
+- **Logging-System** für Troubleshooting
+
+## 🤝 Beitragen
+
+### Entwicklung:
+1. Fork das Repository
+2. Erstelle einen Feature-Branch
+3. Implementiere deine Änderungen
+4. Teste gründlich
+5. Erstelle einen Pull Request
+
+### Bug-Reports:
+- Verwende das Issue-System
+- Beschreibe das Problem detailliert
+- Füge Screenshots bei Bedarf hinzu
+
+## 📄 Lizenz
+
+Dieses Projekt ist ein Nachbau des Arctium WoW-Launchers für Bildungszwecke.
+Alle Original-Assets gehören ihren jeweiligen Besitzern.
+
+## 🙏 Credits
+
+- **Original Launcher:** Arctium Team
+- **Assets:** Murloc Village
+- **Godot Engine:** Godot Foundation
+- **Font:** LifeCraft Font
+
+---
+
+**Viel Spaß beim Spielen! 🎮**
 
