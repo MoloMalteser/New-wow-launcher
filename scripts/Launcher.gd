@@ -1,7 +1,7 @@
 extends Control
 
 # WoW Launcher Hauptskript
-# Nachbau des Arctium WoW-Launchers in Godot 4
+# Kombiniert Downloader (Murloc Village) und Game-Launcher (Arctium) Funktionalität
 
 # UI Referenzen
 @onready var file_progress = $MainPanel/VBoxContainer/ProgressArea/FileProgress
@@ -14,6 +14,7 @@ extends Control
 @onready var settings_button = $MainPanel/VBoxContainer/ButtonArea/SettingsButton
 @onready var quit_button = $MainPanel/VBoxContainer/ButtonArea/QuitButton
 @onready var swimming_murloc = $SwimmingMurloc
+@onready var content_area = $MainPanel/VBoxContainer/ContentArea
 
 # Konfiguration
 var config = {
@@ -25,10 +26,23 @@ var config = {
 	"path_end": ".json"
 }
 
+# Game Launcher Konfiguration
+var game_config = {
+	"supported_versions": {
+		"retail": {"name": "Retail", "binary": "Wow.exe", "folder": "_retail_", "min_build": 37862},
+		"classic": {"name": "Classic BC/WotLK", "binary": "WowClassic.exe", "folder": "_classic_", "min_build": 39926},
+		"classic_era": {"name": "Classic Era", "binary": "WowClassic.exe", "folder": "_classic_era_", "min_build": 40347}
+	},
+	"default_version": "retail",
+	"game_path": "",
+	"config_file": "Config.wtf"
+}
+
 # Status Variablen
 var download_in_progress = false
 var can_play = false
 var version = "1.0.0"
+var current_game_version = "retail"
 
 # Patch Manager
 var patch_manager = null
@@ -40,6 +54,7 @@ func _ready():
 	load_config()
 	check_game_status()
 	start_murloc_animation()
+	setup_game_options()
 
 func setup_ui():
 	# Setze initiale UI-States
@@ -74,9 +89,12 @@ func check_game_status():
 	update_play_button_visibility()
 
 func is_game_up_to_date() -> bool:
-	# Simuliere Spielstatus-Prüfung
-	# In der echten Implementierung würde hier die Datei-Prüfung stattfinden
-	return false
+	# Prüfe ob die Spiel-Dateien vorhanden sind
+	var game_info = game_config.supported_versions[current_game_version]
+	var game_path = get_game_path()
+	var binary_path = game_path.path_join(game_info.binary)
+	
+	return FileAccess.file_exists(binary_path)
 
 func update_play_button_visibility():
 	play_button.visible = can_play
@@ -99,6 +117,36 @@ func _animate_murloc():
 	tween.tween_property(swimming_murloc, "position:x", 1200, 10.0)
 	tween.tween_property(swimming_murloc, "position:x", -200, 0.0)
 
+func setup_game_options():
+	# Erstelle Game Options UI
+	var game_options_panel = content_area.get_node("Game Options/GameOptionsPanel/GameOptionsContent")
+	
+	# Version Selector
+	var version_label = Label.new()
+	version_label.text = "Game Version:"
+	version_label.add_theme_color_override("font_color", Color(0.827, 0.702, 0.349, 1))
+	game_options_panel.add_child(version_label)
+	
+	var version_option = OptionButton.new()
+	version_option.add_item("Retail (Dragonflight/Shadowlands)", 0)
+	version_option.add_item("Classic BC/WotLK", 1)
+	version_option.add_item("Classic Era", 2)
+	version_option.selected = 0
+	version_option.item_selected.connect(_on_version_selected)
+	game_options_panel.add_child(version_option)
+	
+	# Server Configuration
+	var server_label = Label.new()
+	server_label.text = "Server Configuration:"
+	server_label.add_theme_color_override("font_color", Color(0.827, 0.702, 0.349, 1))
+	game_options_panel.add_child(server_label)
+	
+	var server_input = LineEdit.new()
+	server_input.placeholder_text = "Enter server address (e.g., 127.0.0.1:8085)"
+	server_input.add_theme_color_override("font_color", Color(0.827, 0.702, 0.349, 1))
+	server_input.add_theme_color_override("caret_color", Color(0.827, 0.702, 0.349, 1))
+	game_options_panel.add_child(server_input)
+
 # Button Event Handler
 func _on_repair_button_pressed():
 	if not download_in_progress:
@@ -117,6 +165,15 @@ func _on_settings_button_pressed():
 
 func _on_quit_button_pressed():
 	get_tree().quit()
+
+func _on_version_selected(index: int):
+	# Ändere Game Version
+	match index:
+		0: current_game_version = "retail"
+		1: current_game_version = "classic"
+		2: current_game_version = "classic_era"
+	
+	check_game_status()
 
 # Download Funktionen
 func start_download(repair: bool):
@@ -170,22 +227,72 @@ func update_button_states():
 	download_button.disabled = download_in_progress
 	settings_button.disabled = download_in_progress
 
+# Game Launch Funktionen (Arctium Launcher Funktionalität)
 func launch_game():
-	# Starte World of Warcraft
+	# Starte World of Warcraft mit Arctium Launcher Funktionalität
+	var game_info = game_config.supported_versions[current_game_version]
+	var game_path = get_game_path()
+	var binary_path = game_path.path_join(game_info.binary)
+	
+	if not FileAccess.file_exists(binary_path):
+		print("Game binary not found: ", binary_path)
+		return
+	
+	# Erstelle Launch-Parameter
+	var launch_args = []
+	
+	# Füge Server-Konfiguration hinzu
+	var server_config = get_server_config()
+	if server_config:
+		launch_args.append("-portal")
+		launch_args.append(server_config)
+	
+	# Füge Version-Parameter hinzu
+	match current_game_version:
+		"classic":
+			launch_args.append("--version")
+			launch_args.append("Classic")
+		"classic_era":
+			launch_args.append("--version")
+			launch_args.append("ClassicEra")
+	
+	# Füge Config-Parameter hinzu
+	launch_args.append("-config")
+	launch_args.append(game_config.config_file)
+	
+	# Starte das Spiel
 	var os_name = OS.get_name()
 	
 	match os_name:
 		"Windows":
-			# Windows: Starte Wow.exe
-			OS.execute("Wow.exe", [], false)
+			# Windows: Starte direkt
+			OS.execute(binary_path, launch_args, false)
 		"macOS":
-			# macOS: Starte Wow.app
-			OS.execute("open", ["Wow.app"], false)
+			# macOS: Starte über open
+			var args = [binary_path] + launch_args
+			OS.execute("open", args, false)
 		"Linux":
-			# Linux: Wine Wow.exe
-			OS.execute("wine", ["Wow.exe"], false)
+			# Linux: Wine
+			var args = [binary_path] + launch_args
+			OS.execute("wine", args, false)
 		_:
 			print("Unsupported platform: ", os_name)
+
+func get_game_path() -> String:
+	# Bestimme Spiel-Pfad
+	var game_info = game_config.supported_versions[current_game_version]
+	var base_path = game_config.game_path
+	
+	if base_path.is_empty():
+		# Verwende aktuelles Verzeichnis
+		base_path = OS.get_executable_path().get_base_dir()
+	
+	return base_path.path_join(game_info.folder)
+
+func get_server_config() -> String:
+	# Hole Server-Konfiguration aus UI oder Settings
+	# Hier würde die Server-Konfiguration aus dem UI gelesen werden
+	return "127.0.0.1:8085"  # Default für lokale Entwicklung
 
 func open_settings():
 	# Öffne Einstellungsfenster
