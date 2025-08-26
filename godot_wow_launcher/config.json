@@ -1,0 +1,21 @@
+{
+    "host": "ftp.murlocvillage.com",
+    "available_language": ["frFR", "enUS"],
+    "default_language": "enUS",
+    "patchlist_endpoint": "https://wotlk.murlocvillage.com/api/launcher",
+    "end_sound": "murloc.mp3",
+    "extension": true,
+    "mobile_settings": {
+        "joystick_size": 100.0,
+        "joystick_deadzone": 10.0,
+        "button_size": 80.0,
+        "enable_vibration": true,
+        "enable_sound_feedback": true
+    },
+    "ui_settings": {
+        "theme": "dark",
+        "language": "enUS",
+        "auto_check_patches": true,
+        "show_progress_details": true
+    }
+}
